@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blaseball Name Generator</title>
+    <script>
+        async function refresh(){
+            let chain = await fetch("chain.json").then(data=>data.json())
+            let names = [];
+            for(let i = 0; i<10; i++){
+                names.push(text())
+            }
+            document.querySelector(".names").innerHTML = names.join("<p>")
+
+
+            function text(){
+                const chars = Object.keys(chain)
+                let char = chars[Math.floor(Math.random() * chars.length)]
+                // while(true){
+                let result = '';
+                let breaks = 0;
+                for(let i = 0; i < 15; i++){
+                    result += char + '';
+                    last = result.substr(result.length-3)
+                    newChar =  chain[last][Math.floor(Math.random() * chain[last].length)]
+                    if(newChar == ' ') breaks++;
+                    if(breaks == 2) break;
+                    char = newChar;
+                    // console.log(result)
+                }
+                return result.trim();
+            }
+        }
+    </script>
+    <style>
+        body{
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 1em;
+            font-size: 24px;
+            font-family: "Open Sans","Helvetica Neue",sans-serif;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+        button{
+            background-color: white;
+            color: black;
+            border: none;
+            border-radius: 40px;
+            font-size: 1em;
+            padding: 0.5em;
+            font-weight: 700;
+            line-height: 21px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body onload="refresh()">
+    <div class=names></div>
+    <button onclick="refresh()">New Names</button>
+
+</body>
+</html>
